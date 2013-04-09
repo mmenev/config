@@ -3,9 +3,10 @@ package edu.hm.hafner.util;
 /**
  * FIXME: Document type PushMasterTest.
  *
- * @author Ulli Hafner 
+ * @author Ulli Hafner
  */
 public class PushMasterTest {
-    
+
+    //Grützi
 }
 
