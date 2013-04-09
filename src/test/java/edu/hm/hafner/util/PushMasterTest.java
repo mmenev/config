@@ -7,6 +7,6 @@ package edu.hm.hafner.util;
  */
 public class PushMasterTest {
 
-    //Grützi
+    //Grützi Mihail
 }
 
