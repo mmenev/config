@@ -26,4 +26,28 @@ public final class StringUtils {
     private StringUtils() {
         // prevents instantiation
     }
+
+    /**
+     * Removes the specified characters from the string.
+     * @param input the input string
+     * @param toBeRemoved the string that should be removed
+     * @return the stripped string
+     */
+    public static String strip(final String input, final String toBeRemoved) {
+        String tmp = input;
+        if (input == null || toBeRemoved == null) {
+            throw new IllegalArgumentException("None of the parameters should be null");
+        }
+
+        if (toBeRemoved.length() == 0) {
+            return input;
+        }
+        else {
+            char[] toRemove = toBeRemoved.toCharArray();
+            for (char character : toRemove) {
+                tmp = tmp.replaceAll(String.valueOf(character), "");
+            }
+            return tmp;
+        }
+    }
 }
