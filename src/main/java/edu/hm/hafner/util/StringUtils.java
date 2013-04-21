@@ -38,11 +38,12 @@ public final class StringUtils {
      * @author Mihail Menev, menev@hm.edu
      */
     public static String strip(final String input, final String toBeRemoved) {
+        // auxiliary variable to process the input
         String tmp = input;
+
         if (input == null || toBeRemoved == null) {
             throw new IllegalArgumentException("None of the parameters should be null");
         }
-
         else if (toBeRemoved.length() == 0) {
             return input;
         }
@@ -56,8 +57,8 @@ public final class StringUtils {
     }
 
     /**
-     * Tests if the password given as parameter is secure enough. A secure
-     * password means- at least 20 charachter- from them:
+     * Tests if the password given as parameter is secure enough.
+     * A secure password means- at least 20 charachter- from them:
      *          - at least 10 unique
      *          - at least 1 upper case character
      *          - at least 1 lower case character
@@ -68,10 +69,12 @@ public final class StringUtils {
      * @author Mihail Menev, menev@hm.edu
      */
     public static boolean isSecure(final String inputPass) {
+
         // Null is valid but weak password
         if (inputPass == null) {
             return false;
         }
+
         // Funny way to eliminate the duplicates if any.
         // Later used to check how many unique characters have the password.
         final Set<Character> inputPassSet = new HashSet<Character>();
@@ -107,25 +110,33 @@ public final class StringUtils {
         int sumEven = 0;
         // hold the sum of the digits multiplied by 3, which hava odd indices in the array
         int sumOdd = 0;
+
         if (isbn == null) {
             return false;
         }
+
+        // extract all the digits from the string
         char[] isbnChars = isbn.replaceAll(regex, "").toCharArray();
+
+        // ISBN 13 should have 13 digits
         if (isbnChars.length != 13) {
             return false;
         }
+
+        // convert the char array to int array for the calculation
         int[] isbnDigits = new int[isbnChars.length];
         for (int i = 0; i < isbnChars.length; i++) {
             isbnDigits[i] = isbnChars[i] - '0';
         }
 
         // formula to calculate the isbn number
+        // six pairs of digits-> first is multiplied with one, the second with 3
         for (int i = 0; i < isbnDigits.length / 2; i++) {
             sumEven += isbnDigits[2 * i];
             sumOdd += isbnDigits[2 * i + 1] * 3;
         }
 
-        // the both sums + the last digit of the isbn mod 10 should be 0
+        // (the both sums from above + the last digit of the isbn) mod 10 should be 0
         int sum = sumEven + sumOdd + isbnDigits[isbnDigits.length - 1];
 
         return sum % 10 == 0;
