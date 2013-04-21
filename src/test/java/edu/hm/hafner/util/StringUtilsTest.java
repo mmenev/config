@@ -30,7 +30,8 @@ public class StringUtilsTest {
     }
 
     /**
-     * Tests if the correct characters are removed from the string.
+     * Tests if the the method return a not null string.
+     * @author Mihail Menev, menev@hm.edu
      */
     @Test
     public void testStripMethodNull() {
@@ -38,27 +39,35 @@ public class StringUtilsTest {
     }
 
     /**
-     *
-     * FIXME: Document method testStripMethod.
+     * Tests if the correct characters are removed from the string.
+     * @author Mihail Menev, menev@hm.edu
      */
     @Test
     public void testStripMethod() {
         assertEquals("The string should be the same as the input", "foo",  StringUtils.strip("foo", ""));
-        assertEquals("The string should be foo", "foob", StringUtils.strip("foobar", "ra"));
+        assertEquals("The string should be the same as the input", "foo",  StringUtils.strip("foo", "dsd"));
+        assertEquals("The string should be foob", "foob", StringUtils.strip("foobar", "ra"));
         assertEquals("The string should be '-' ", "-" , StringUtils.strip("Hallo-ollaH", "Halo"));
+        assertEquals("The string should be empty", "", StringUtils.strip("fooobbbbaaarrrrr", "fobar"));
     }
 
     /**
-     * Test if the right exception is thrown by the strip method if a null parameter is passed.
+     * Test if the right exception is thrown by the strip method when the first parameter is null.
      * @author Mihail Menev, menev@hm.edu
      */
     @Test(expected = IllegalArgumentException.class)
     public void testStripMethodIllegalArgument() {
-        StringUtils.strip("foo", "bar");
         StringUtils.strip(null, "foo");
-        StringUtils.strip("foo", null);
-        StringUtils.strip(null, null);
     }
+
+    /**
+    * Test if the right exception is thrown by the strip method when the second parameter is null.
+    * @author Mihail Menev, menev@hm.edu
+    */
+   @Test(expected = IllegalArgumentException.class)
+   public void testStripMethodIllegalArgument2() {
+       StringUtils.strip("foo", null);
+   }
 
     /**
      * Test if strong passwords are recognized as such from the isSecure method.
@@ -76,7 +85,7 @@ public class StringUtilsTest {
      * @author Mihail Menev, menev@hm.edu
      */
     @Test
-    public void testIsSecureFalse(){
+    public void testIsSecureFalse() {
         assertFalse("a short password", StringUtils.isSecure("abcd"));
         assertFalse("An empty password", StringUtils.isSecure(""));
         assertFalse("A password with only lower case", StringUtils.isSecure("abcdefghijklmnopqrstuvwxyz"));
@@ -87,6 +96,28 @@ public class StringUtilsTest {
         assertFalse("Null as a password", StringUtils.isSecure(null));
     }
 
+    /**
+     * Test the isValidIsbn13 method with valid ISBN Numbers.
+     * @author Mihail Menev, menev@hm.edu
+     */
+    @Test
+    public void testIsValidIsbn13() {
+        assertTrue("A valid ISBN 13 number", StringUtils.isValidIsbn13("ISBN 978-0-306-40615-7"));
+        assertTrue("A valid ISBN 13 number", StringUtils.isValidIsbn13("9780670020485"));
+        assertTrue("A valid ISBN 13 number", StringUtils.isValidIsbn13("     9-7-8-    0-3-8-5-521---6   80"));
+    }
 
+    /**
+     * Test the isValidIsbn13 method with invalid ISBN Numbers.
+     * @author Mihail Menev, menev@hm.edu
+     */
+    @Test
+    public void testIsValidIsbn13False() {
+        assertFalse("An invalid ISBN number", StringUtils.isValidIsbn13("ISBN 978-0-306-40615-2"));
+        assertFalse("A null as a ISBN number", StringUtils.isValidIsbn13(null));
+        assertFalse("Too short number", StringUtils.isValidIsbn13("ISBN --78-65-4-6-3-   54"));
+        assertFalse("Too long number", StringUtils.isValidIsbn13("ISBN --78-65-4-\n\r-3-   543242344432423"));
+        assertFalse("An empty string as a ISBN number", StringUtils.isValidIsbn13(""));
+    }
 }
 

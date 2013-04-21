@@ -93,4 +93,41 @@ public final class StringUtils {
             return false;
         }
     }
+
+    /**
+     * Checks if the passed string is a valid ISBN 13 number.
+     * @param isbn the string that should be checked
+     * @return true if it is a valid ISBN number, false if null or not a valid ISBN
+     * @author Mihail Menev, menev@hm.edu
+     */
+    public static boolean isValidIsbn13(final String isbn) {
+        // Regex to remove all non digit chars from the string
+        String regex = "\\D+";
+        // hold the sum of the digits with even indices in the array
+        int sumEven = 0;
+        // hold the sum of the digits multiplied by 3, which hava odd indices in the array
+        int sumOdd = 0;
+        if (isbn == null) {
+            return false;
+        }
+        char[] isbnChars = isbn.replaceAll(regex, "").toCharArray();
+        if (isbnChars.length != 13) {
+            return false;
+        }
+        int[] isbnDigits = new int[isbnChars.length];
+        for (int i = 0; i < isbnChars.length; i++) {
+            isbnDigits[i] = isbnChars[i] - '0';
+        }
+
+        // formula to calculate the isbn number
+        for (int i = 0; i < isbnDigits.length / 2; i++) {
+            sumEven += isbnDigits[2 * i];
+            sumOdd += isbnDigits[2 * i + 1] * 3;
+        }
+
+        // the both sums + the last digit of the isbn mod 10 should be 0
+        int sum = sumEven + sumOdd + isbnDigits[isbnDigits.length - 1];
+
+        return sum % 10 == 0;
+    }
 }
