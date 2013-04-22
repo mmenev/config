@@ -90,7 +90,7 @@ public class StringUtilsTest {
         assertFalse("An empty password", StringUtils.isSecure(""));
         assertFalse("A password with only lower case", StringUtils.isSecure("abcdefghijklmnopqrstuvwxyz"));
         assertFalse("Only UPEER CASE password", StringUtils.isSecure("ABCDEFGHIJKLMNOPQRSTUVWXYZ"));
-        assertFalse("Uppercase and lowercase", StringUtils.isSecure("abcdeabcdeABcdeabcd3!"));
+        assertFalse("Password with less as 10 unique characters", StringUtils.isSecure("abcdeabcdeABcdeabcd3!"));
         assertFalse("Everything correct but the special char", StringUtils.isSecure("pqrabcd3efghL569KMinS"));
         assertFalse("Everything correct but the number", StringUtils.isSecure("pqrabcd§efghL%&/KMinS"));
         assertFalse("Null as a password", StringUtils.isSecure(null));
@@ -118,6 +118,7 @@ public class StringUtilsTest {
         assertFalse("Too short number", StringUtils.isValidIsbn13("ISBN --78-65-4-6-3-   54"));
         assertFalse("Too long number", StringUtils.isValidIsbn13("ISBN --78-65-4-\n\r-3-   543242344432423"));
         assertFalse("An empty string as a ISBN number", StringUtils.isValidIsbn13(""));
+        assertFalse("Invalid ISBN only with characters", StringUtils.isValidIsbn13("asfjdsfgskdafg"));
     }
 
 
@@ -186,8 +187,6 @@ public class StringUtilsTest {
         assertEquals("this should be a valid isbn", true, StringUtils.isValidIsbn10(isbn));
     }
 
-
-
     /**
      * Tests if the String is blank.
      * @author Johann Vierthaler, johann.vierthaler@web.de
@@ -241,12 +240,5 @@ public class StringUtilsTest {
     public void testJoinEmptyArray() {
         StringUtils.join(new String[]{});
     }
-
-
-
-
-
-
-
 }
 

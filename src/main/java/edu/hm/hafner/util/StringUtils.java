@@ -109,7 +109,7 @@ public final class StringUtils {
         String regex = "\\D+";
         // hold the sum of the digits with even indices in the array
         int sumEven = 0;
-        // hold the sum of the digits multiplied by 3, which hava odd indices in the array
+        // hold the sum of the digits multiplied by 3, which have odd indices in the array
         int sumOdd = 0;
 
         if (isbn == null) {
