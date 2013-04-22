@@ -2,6 +2,7 @@ package edu.hm.hafner.util;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 /**
  * Several useful utility methods that work on {@link String} instances.
@@ -141,4 +142,106 @@ public final class StringUtils {
 
         return sum % 10 == 0;
     }
+
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    /**
+     * Checks if the given string is a valid ISBN.
+     *
+     * @author Johann Vierthaler
+     * @param isbnEingabe
+     *        is going to be processed in this method
+     * @return boolean true when valid.
+     */
+    public static boolean isValidIsbn10(final String isbnEingabe) {
+        //null is not allowed for an isbn
+        if (isbnEingabe == null) {
+            return false;
+        }
+
+        //the tokenizer splits the String on occurences of '-' and whitespaces.
+        StringTokenizer st = new StringTokenizer(isbnEingabe, " -");
+        String processedIsbn = st.nextToken();
+        while (st.hasMoreTokens()) {
+
+            // The tokens are only allowed to be a series of numbers.
+            // An occurrence of non-number-chars returns false.
+            // When it is a series of numbers the string concatenates with processedIsbn
+            if (processedIsbn.matches("\\d+")) {
+                processedIsbn = processedIsbn.concat(st.nextToken());
+            }
+
+            else {
+                return false;
+            }
+        }
+
+        // The processedIsbn should now have a length of 10.
+        // Otherwise it returns false.
+        if (processedIsbn.length() == 10) {
+
+            // This Integer-Array contains all ten characters.
+            // The single values are parsed from the String.
+            int[] isbnAr = new int[processedIsbn.length()];
+            for (int i = 0; i < isbnAr.length; i++) {
+                isbnAr[i] = Integer.parseInt(processedIsbn.substring(i, i + 1));
+            }
+
+            // At last the Isbn needs be ckecked with the checkSum.
+            // If the result (res) % 11 differs from 0, false is returned.
+            int j = 0;
+            int res = 0;
+            for (int i = 10; i > 0; i--) {
+                res += isbnAr[j] * i;
+                j++;
+            }
+            return res % 11 == 0;
+        }
+
+        return false;
+
+    }
+
+    /**
+     * Checks if the string is null or is only whitespace.
+     * @author Johann Vierthaler
+     * @param eingabe needs to be processed to determine if it is blank.
+     * @return true when string is null or contains whitespace
+     */
+    public static boolean isBlank(final String eingabe) {
+        return eingabe == null || eingabe.matches("\\s*");
+    }
+
+    /**
+     * Concatenates all elements in the array to a single string.
+     * The Array-Elements are separated by a ','.
+     * @author Johann Vierthaler
+     * @param elements -> This Array is being concatenated.
+     * @return newString a string containing all elements in the array.
+     */
+    public static String join(final String... elements) {
+
+        // The Array is not allowed to be null or have only 0 elements (NullPointerException)
+        if (elements != null && elements.length > 0) {
+
+            // newString concatenates all elements in the array.
+            // When Array-Element is null or has length of zero -> ",(null)" will be added.
+            String newString = elements[0];
+            for (int i = 1; i < elements.length; i++) {
+                if (elements[i] == null || elements[i].length() == 0) {
+                    newString = newString.concat(",(null)");
+                }
+                else {
+                    newString = newString.concat("," + elements[i]);
+                }
+            }
+            return newString;
+        }
+        throw new IllegalArgumentException();
+    }
+
 }
+
