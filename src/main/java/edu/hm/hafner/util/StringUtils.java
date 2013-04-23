@@ -157,8 +157,9 @@ public final class StringUtils {
      * @return boolean true when valid.
      */
     public static boolean isValidIsbn10(final String isbnEingabe) {
+
         //null is not allowed for an isbn
-        if (isbnEingabe == null) {
+        if (isBlank(isbnEingabe)) {
             return false;
         }
 
@@ -230,6 +231,10 @@ public final class StringUtils {
             // newString concatenates all elements in the array.
             // When Array-Element is null or has length of zero -> ",(null)" will be added.
             String newString = elements[0];
+            if (newString == null || newString.length() == 0) {
+                newString = "(null)";
+            }
+
             for (int i = 1; i < elements.length; i++) {
                 if (elements[i] == null || elements[i].length() == 0) {
                     newString = newString.concat(",(null)");
