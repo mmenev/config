@@ -3,10 +3,14 @@ package edu.hm.hafner.util;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
 import com.google.common.io.ByteStreams;
+import com.google.common.io.OutputSupplier;
 
 import org.junit.Test;
 
@@ -24,20 +28,27 @@ public class GuavaByteStreamCopyTest {
     @Test
     public void testname() throws Exception {
         // Given
-        InputStream is = mock(InputStream.class);
-        OutputStream os = mock(OutputStream.class);
-        int bufferSize = 4096;
-        int byteToCopy = 6;
-        when(is.read(new byte[bufferSize])).thenReturn(byteToCopy, -1);
+        InputStream is = mock(ByteArrayInputStream.class);
+        OutputSupplier<OutputStream> ous = new OutputSupplier<OutputStream>() {
+
+            @Override
+            public OutputStream getOutput() throws IOException {
+                //return mock(OutputStream.class);
+                return new BufferedOutputStream(System.out);
+            }};
+        byte[] toCopy = "Mockito".getBytes();
+        when(is.read(toCopy)).thenReturn(-1);
 
 
         // When
-        long result = ByteStreams.copy(is, os);
+        is = new ByteArrayInputStream(toCopy);
+        long result = ByteStreams.copy(is, ous);
 
 
         //Then
-        verify(os).write(new byte[bufferSize], 0, byteToCopy);
-        assertEquals("Expected to write a 6: ", byteToCopy, result);
+        assertEquals("Expected to write a 6: ", toCopy.length, result);
+
+
     }
 
 }
